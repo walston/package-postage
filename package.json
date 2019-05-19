@@ -1,0 +1,24 @@
+{
+  "name": "distro-package",
+  "version": "0.0.0",
+  "description": "copy the important parts of package.json into a smaller, shippable ./dist/package.json",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/walston/distro-package.git"
+  },
+  "keywords": [
+    "publish",
+    "distributable",
+    "package"
+  ],
+  "author": "walston",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/walston/distro-package/issues"
+  },
+  "homepage": "https://github.com/walston/distro-package#readme"
+}
