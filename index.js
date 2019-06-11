@@ -85,11 +85,12 @@ const default_keys = [
   "main",
   "scripts",
   "dependencies",
+  "peerDependencies",
   "license"
 ];
 
 for (const key of default_keys) {
-  if (Object.prototype.hasOwnProperty.bind(pkg)(key)) {
+  if (objectPath(pkg).has(key)) {
     new_pkg[key] = pkg[key];
   }
 }
