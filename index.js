@@ -83,6 +83,7 @@ const default_keys = [
   "repository",
   "bugs",
   "main",
+  "module",
   "scripts",
   "dependencies",
   "peerDependencies",
