@@ -1,11 +1,8 @@
 {
   "name": "package.shipit",
   "version": "0.0.0",
-  "description": "copy the important parts of package.json into a smaller, shippable ./dist/package.json so you can publish that sub-directory",
+  "description": "copy the important parts of package.json into a smaller, shippable package.json for publishing",
   "main": "index.js",
-  "scripts": {
-    "test": "node index.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:walston/package.shipit.git"
@@ -16,7 +13,9 @@
     "package",
     "package.json",
     "pretty-pathing",
-    "node_modules"
+    "node_modules",
+    "utility",
+    "library"
   ],
   "author": "walston",
   "license": "ISC",
@@ -26,6 +25,7 @@
   "homepage": "https://github.com/walston/distro-package#readme",
   "dependencies": {
     "colors": "^1.3.3",
+    "object-path": "^0.11.4",
     "yargs": "^13.2.4"
   }
 }
