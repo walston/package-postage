@@ -14,13 +14,15 @@ const args = yargs
     alias: "o",
     describe:
       "Omit certain keys/sub-keys from being included in the output package.json",
-    example: "--omit=scripts,contributors"
+    example: "--omit=scripts,contributors",
+    default: ""
   })
   .option("include", {
     string: true,
     alias: "i",
     describe: "Include keys/sub-keys in the output package.json",
-    example: "--include=eslint,scripts.start,scripts.test"
+    example: "--include=eslint,scripts.start,scripts.test",
+    default: ""
   })
   .option("indent", {
     string: true,
@@ -95,27 +97,10 @@ for (const key of default_keys) {
 /** @type {{ key: string, action: 'include' | 'omit' }[]} */
 const user_requested_keys = []
   .concat(
-    args.include
-      ? args.include.split(",").map(key => ({ key, action: "include" }))
-      : [],
-    args.omit ? args.omit.split(",").map(key => ({ key, action: "omit" })) : []
+    args.include.split(",").map(key => ({ key, action: "include" })),
+    args.omit.split(",").map(key => ({ key, action: "omit" }))
   )
-  .sort((a_path, b_path) => {
-    const a = a_path.key.split(".");
-    const b = b_path.key.split(".");
-    var l = Math.max(a.length, b.length);
-    for (var i = 0; i < l; i++) {
-      if (i >= a.length) return -1;
-      if (i >= b.length) return +1;
-      if (a[i] > b[i]) return +1;
-      if (a[i] < b[i]) return -1;
-      if (a[i].length < b[i].length) return -1;
-      if (a[i].length > b[i].length) return +1;
-      if (a_path.action === "include" && b_path.action === "omit") return +1;
-      if (b_path.action === "include" && a_path.action === "omit") return -1;
-    }
-    return -1;
-  });
+  .sort(require("./path-sort"));
 
 for (const { key, action } of user_requested_keys) {
   if (action === "include" && objectPath(pkg).has(key)) {
@@ -125,10 +110,13 @@ for (const { key, action } of user_requested_keys) {
   }
 }
 
-const required_keys = ["name", "version"];
-for (const key of required_keys) {
-  new_pkg[key] = pkg[key];
-}
+new_pkg = Object.assign(
+  {
+    name: pkg.name,
+    version: pkg.version
+  },
+  new_pkg
+);
 
 const pkg_data = JSON.stringify(new_pkg, null, indent);
 
