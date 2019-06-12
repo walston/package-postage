@@ -4,10 +4,16 @@ const yargs = require("yargs");
 const objectPath = require("object-path");
 
 const args = yargs
+  .scriptName("package-shipit")
+  .version()
   .option("no-overwrite", {
     boolean: true,
     describe: "Terminates process rather than overwriting old target path",
     default: false
+  })
+  .option("use-file", {
+    describe: "Use provided file as `package.json`",
+    default: path.join(process.cwd(), "package.json")
   })
   .option("omit", {
     string: true,
@@ -38,32 +44,26 @@ const indent = (function(arg) {
 })(args.indent);
 
 const path_to_original = (function(uri) {
-  // if uri is an absolute path, just use that, otherwise append process.cwd
+  if (!fs.existsSync(uri)) {
+    const rel = path.relative(process.cwd(), uri);
+    console.error(`Cannot use "${uri}", file does not exist`);
+    process.exit(1);
+  }
   if (uri[0] === "/") return uri;
   return path.join(process.cwd(), uri);
-})(
-  /** @note allow 0 args or even 1 arg that is the target directory */
-  args._[1] ? args._[0] || "package.json" : "package.json"
-);
+})(args["use-file"]);
 
 const path_to_output = (function(uri) {
-  if (!/\/package\.json$/.test(uri)) uri += "package.json";
+  /** @todo check to ensure `uri` is a directory */
+  if (!fs.existsSync(uri)) {
+    const rel = path.relative(process.cwd(), uri);
+    console.error(`Cannot write to "${rel}", directory does not exist`);
+    process.exit(1);
+  }
+  uri = path.join(uri, "package.json");
   if (uri[0] === "/") return uri;
   return path.join(process.cwd(), uri);
-})(args._[1] || "dist/package.json");
-
-if (!fs.existsSync(path_to_original)) {
-  console.error("Package does not exist", args.package);
-  process.exit(1);
-}
-
-if (!fs.existsSync(path.dirname(path_to_output))) {
-  console.error(
-    "Output directory does not exist",
-    path.dirname(path_to_output)
-  );
-  process.exit(1);
-}
+})(args._[0] || path.join(process.cwd(), "dist"));
 
 let pkg;
 try {
