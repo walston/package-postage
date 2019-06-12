@@ -6,6 +6,7 @@ const objectPath = require("object-path");
 const args = yargs
   .scriptName("package-shipit")
   .version()
+  .pkgConf("shipit")
   .option("no-overwrite", {
     boolean: true,
     describe: "Terminates process rather than overwriting old target path",

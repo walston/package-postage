@@ -27,5 +27,16 @@
     "colors": "^1.3.3",
     "object-path": "^0.11.4",
     "yargs": "^13.2.4"
+  },
+  "scripts": {
+    "pretest": "rm -rf dist/**/*",
+    "test": "node ./index.js"
+  },
+  "shipit": {
+    "indent": "2",
+    "omit": "shipit,scripts",
+    "copy-file": [
+      "./README.md"
+    ]
   }
 }
