@@ -15,6 +15,13 @@ const args = yargs
     describe: "Use provided file as `package.json`",
     default: path.join(process.cwd(), "package.json")
   })
+  .option("copy-file", {
+    alias: "c",
+    array: true,
+    string: true,
+    describe: "Copy this file to target directory with package.json",
+    example: "--copy-file=README.md -c=CHANGELOG.md"
+  })
   .option("omit", {
     string: true,
     alias: "o",
@@ -123,7 +130,21 @@ new_pkg = Object.assign(
 const pkg_data = JSON.stringify(new_pkg, null, indent);
 
 fs.writeFile(path_to_output, pkg_data, err => {
-  if (!err) return;
-  console.error(err);
-  process.exit(1);
+  if (!err) {
+    copyFiles().catch(console.error);
+  } else {
+    console.error(err);
+    process.exit(1);
+  }
 });
+
+async function copyFiles() {
+  const files = args["copy-file"];
+  for (const filename of files) {
+    const src = path.resolve(process.cwd(), filename);
+    const dest = path.resolve(path.dirname(path_to_output), filename);
+    fs.copyFile(src, dest, err => {
+      if (err) throw err;
+    });
+  }
+}
