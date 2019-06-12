@@ -22,10 +22,10 @@ Copy package.json from your working directory into `./any-folder-name`
 $ package-shipit any-folder-name/
 ```
 
-Copy `./package.dist.json` into `./build/` (not advised)
+Use an arbitrary file: `./package.dist.json`
 
 ```bash
-$ package-shipit package.dist.json build/
+$ package-shipit build/ --use-file package.dist.json
 ```
 
 Indent with tabs
