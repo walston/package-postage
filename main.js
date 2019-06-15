@@ -9,7 +9,6 @@ const DEFAULT_KEYS = [
   "bugs",
   "main",
   "module",
-  "scripts",
   "dependencies",
   "peerDependencies",
   "license"
@@ -59,15 +58,20 @@ function makePackage(config_data, options) {
   }
 
   const required_keys = ["name", "version"];
+  const required_config = {};
   for (const key of required_keys) {
     if (objectPath(config).has(key)) {
-      objectPath(new_config).set(key, objectPath(config).get(key));
+      objectPath(required_config).set(key, objectPath(config).get(key));
     } else {
       throw Error(`Missing required key ${key}`);
     }
   }
 
-  return JSON.stringify(new_config, null, options.indent);
+  return JSON.stringify(
+    Object.assign(required_config, new_config),
+    null,
+    options.indent
+  );
 }
 
 /**

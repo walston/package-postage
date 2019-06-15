@@ -30,7 +30,7 @@
   },
   "scripts": {
     "pretest": "rm -rf dist/**/*",
-    "test": "node ./index.js"
+    "test": "./shipit"
   },
   "shipit": {
     "indent": "2",
