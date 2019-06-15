@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 const yargs = require("yargs");
-const objectPath = require("object-path");
 
 const args = yargs
   .scriptName("package-shipit")
@@ -54,7 +53,7 @@ const indent = (function(arg) {
 const path_to_original = (function(uri) {
   if (!fs.existsSync(uri)) {
     const rel = path.relative(process.cwd(), uri);
-    console.error(`Cannot use "${uri}", file does not exist`);
+    console.error(`Cannot use "${rel}", file does not exist`);
     process.exit(1);
   }
   if (uri[0] === "/") return uri;
@@ -73,70 +72,19 @@ const path_to_output = (function(uri) {
   return path.join(process.cwd(), uri);
 })(args._[0] || path.join(process.cwd(), "dist"));
 
-let pkg;
-try {
-  pkg = require(path_to_original);
-} catch (error) {
-  console.error("Package isn't not valid");
-  console.error(error);
-  process.exit(1);
-}
+fs.readFile(path_to_original, (err, data) => {
+  if (err) throw Error(`ReadError: could not access ${path_to_original}`);
 
-let new_pkg = {};
-const default_keys = [
-  "author",
-  "contributors",
-  "description",
-  "keywords",
-  "repository",
-  "bugs",
-  "main",
-  "module",
-  "scripts",
-  "dependencies",
-  "peerDependencies",
-  "license"
-];
+  const pkg = require("./main")(data.toString(), {
+    indent,
+    omit: args.omit.split(","),
+    include: args.include.split(",")
+  });
 
-for (const key of default_keys) {
-  if (objectPath(pkg).has(key)) {
-    new_pkg[key] = pkg[key];
-  }
-}
-
-/** @type {{ key: string, action: 'include' | 'omit' }[]} */
-const user_requested_keys = []
-  .concat(
-    args.include.split(",").map(key => ({ key, action: "include" })),
-    args.omit.split(",").map(key => ({ key, action: "omit" }))
-  )
-  .sort(require("./path-sort"));
-
-for (const { key, action } of user_requested_keys) {
-  if (action === "include" && objectPath(pkg).has(key)) {
-    objectPath(new_pkg).set(key, objectPath(pkg).get(key));
-  } else if (action === "omit") {
-    objectPath(new_pkg).del(key);
-  }
-}
-
-new_pkg = Object.assign(
-  {
-    name: pkg.name,
-    version: pkg.version
-  },
-  new_pkg
-);
-
-const pkg_data = JSON.stringify(new_pkg, null, indent);
-
-fs.writeFile(path_to_output, pkg_data, err => {
-  if (!err) {
+  fs.writeFile(path_to_output, pkg, err => {
+    if (err) throw Error(`WriteError: could not write to ${path_to_output}`);
     copyFiles().catch(console.error);
-  } else {
-    console.error(err);
-    process.exit(1);
-  }
+  });
 });
 
 async function copyFiles() {
