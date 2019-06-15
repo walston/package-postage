@@ -18,6 +18,7 @@ function getFilepath(p) {
   });
 }
 
+/** @param {string} p path to package.json */
 function readPackage(p) {
   if (!path.isAbsolute(p)) p = path.resolve(CWD, p);
   return new Promise((resolve, reject) => {

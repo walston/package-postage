@@ -16,9 +16,9 @@ const DEFAULT_KEYS = [
 
 /**
  * @typedef Options
- * @property {string[]} omit
- * @property {string[]} include
- * @property {string} indent
+ * @property {string[]} [omit]
+ * @property {string[]} [include]
+ * @property {string} [indent]
  */
 
 /**

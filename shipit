@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 const yargs = require("yargs");
-const handlePackage = require("./main");
+const main = require("./main");
 
 const args = yargs
   .scriptName("package-shipit")
@@ -23,19 +23,20 @@ const args = yargs
     example: "--copy-file=README.md -c=CHANGELOG.md"
   })
   .option("omit", {
-    string: true,
     alias: "o",
-    describe:
-      "Omit certain keys/sub-keys from being included in the output package.json",
-    example: "--omit=scripts,contributors",
-    default: ""
+    array: true,
+    string: true,
+    describe: "Omit certain keys/sub-keys from the output package.json",
+    example: "--omit=scripts -o=contributors",
+    default: [""]
   })
   .option("include", {
-    string: true,
     alias: "i",
+    array: true,
+    string: true,
     describe: "Include keys/sub-keys in the output package.json",
-    example: "--include=eslint,scripts.start,scripts.test",
-    default: ""
+    example: "--include=eslint -i=scripts.start,scripts.test",
+    default: [""]
   })
   .option("indent", {
     string: true,
@@ -50,24 +51,32 @@ const indent = (function(arg) {
   return "  ";
 })(args.indent);
 
-const fileHandler = require("./files")(args._[0] || "dist");
+const files = require("./files")(args._[0] || "dist");
 
-async function main() {
-  const pkg = await fileHandler.readPackage(args["use-file"]);
-  const postage_options = {
+async function execute() {
+  const package_json = await files.readPackage(args["use-file"]);
+  const publish_ready_package_json = main(package_json, {
     indent,
-    include: args["include"].split(","),
-    omit: args["omit"].split(",")
-  };
-  const publish_ready_package_json = handlePackage(pkg, postage_options);
+    include: args["include"].reduce(flattenKeySets, []),
+    omit: args["omit"].reduce(flattenKeySets, [])
+  });
 
-  await fileHandler.writePackage(publish_ready_package_json);
+  await files.writePackage(publish_ready_package_json);
 
   const files_to_copy = args["copy-file"];
-  files_to_copy.forEach(p => fileHandler.copyFile(p));
+  files_to_copy.forEach(p => files.copyFile(p));
 }
 
-main().catch(err => {
+/**
+ * @param {string[]} acc
+ * @param {string} csv
+ * @returns {string[]}
+ */
+function flattenKeySets(acc, csv) {
+  return acc.concat(csv.split(","));
+}
+
+execute().catch(err => {
   console.error(err);
   process.exit(1);
 });
