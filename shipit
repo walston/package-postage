@@ -1,0 +1,82 @@
+#! /usr/bin/env node
+const yargs = require("yargs");
+const main = require("./main");
+
+const args = yargs
+  .scriptName("package-shipit")
+  .version()
+  .pkgConf("shipit")
+  .option("no-overwrite", {
+    boolean: true,
+    describe: "Terminates process rather than overwriting old target path",
+    default: false
+  })
+  .option("use-file", {
+    describe: "Use provided file as `package.json`",
+    default: "package.json"
+  })
+  .option("copy-file", {
+    alias: "c",
+    array: true,
+    string: true,
+    describe: "Copy this file to target directory with package.json",
+    example: "--copy-file=README.md -c=CHANGELOG.md"
+  })
+  .option("omit", {
+    alias: "o",
+    array: true,
+    string: true,
+    describe: "Omit certain keys/sub-keys from the output package.json",
+    example: "--omit=scripts -o=contributors",
+    default: [""]
+  })
+  .option("include", {
+    alias: "i",
+    array: true,
+    string: true,
+    describe: "Include keys/sub-keys in the output package.json",
+    example: "--include=eslint -i=scripts.start,scripts.test",
+    default: [""]
+  })
+  .option("indent", {
+    string: true,
+    alias: "n",
+    default: "tab",
+    choices: ["2", "4", "tab"]
+  }).argv;
+
+const indent = (function(arg) {
+  if (arg === "tab") return "\t";
+  if (arg === "4") return "    ";
+  return "  ";
+})(args.indent);
+
+const files = require("./files")(args._[0] || "dist");
+
+async function execute() {
+  const package_json = await files.readPackage(args["use-file"]);
+  const publish_ready_package_json = main(package_json, {
+    indent,
+    include: args["include"].reduce(flattenKeySets, []),
+    omit: args["omit"].reduce(flattenKeySets, [])
+  });
+
+  await files.writePackage(publish_ready_package_json);
+
+  const files_to_copy = args["copy-file"];
+  files_to_copy.forEach(p => files.copyFile(p));
+}
+
+/**
+ * @param {string[]} acc
+ * @param {string} csv
+ * @returns {string[]}
+ */
+function flattenKeySets(acc, csv) {
+  return acc.concat(csv.split(","));
+}
+
+execute().catch(err => {
+  console.error(err);
+  process.exit(1);
+});

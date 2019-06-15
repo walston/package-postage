@@ -1,150 +1,47 @@
 const path = require("path");
-const fs = require("fs");
-const yargs = require("yargs");
-const objectPath = require("object-path");
+const main = require("./main");
+const files = require("./files");
+/**
+ * @typedef Options
+ * @property {string[]} [omit] package.json keys (dot-syntax works)
+ * @property {string[]} [include] package.json keys (dot-syntax works)
+ * @property {string} [useFile] use this file as `package.json`
+ * @property {string} [target] directory to write files
+ * @property {string[]} [copyFiles] copy files to dist directory
+ * @property {'tab'|'2'|'4'} [indent] */
 
-const args = yargs
-  .scriptName("package-shipit")
-  .version()
-  .option("no-overwrite", {
-    boolean: true,
-    describe: "Terminates process rather than overwriting old target path",
-    default: false
-  })
-  .option("use-file", {
-    describe: "Use provided file as `package.json`",
-    default: path.join(process.cwd(), "package.json")
-  })
-  .option("copy-file", {
-    alias: "c",
-    array: true,
-    string: true,
-    describe: "Copy this file to target directory with package.json",
-    example: "--copy-file=README.md -c=CHANGELOG.md"
-  })
-  .option("omit", {
-    string: true,
-    alias: "o",
-    describe:
-      "Omit certain keys/sub-keys from being included in the output package.json",
-    example: "--omit=scripts,contributors",
-    default: ""
-  })
-  .option("include", {
-    string: true,
-    alias: "i",
-    describe: "Include keys/sub-keys in the output package.json",
-    example: "--include=eslint,scripts.start,scripts.test",
-    default: ""
-  })
-  .option("indent", {
-    string: true,
-    alias: "n",
-    default: "tab",
-    choices: ["2", "4", "tab"]
-  }).argv;
+/** @param {Options} [options] */
+module.exports = function(options) {
+  if (!options) options = {};
 
-const indent = (function(arg) {
-  if (arg === "tab") return "\t";
-  if (arg === "4") return "    ";
-  return "  ";
-})(args.indent);
+  const target = resolve(options.target || "./dist");
+  const package_json = options.useFile || resolve("./package.json");
+  const fileWriter = files(target);
+  const copyFiles = options.copyFiles || [];
 
-const path_to_original = (function(uri) {
-  if (!fs.existsSync(uri)) {
-    const rel = path.relative(process.cwd(), uri);
-    console.error(`Cannot use "${uri}", file does not exist`);
-    process.exit(1);
-  }
-  if (uri[0] === "/") return uri;
-  return path.join(process.cwd(), uri);
-})(args["use-file"]);
-
-const path_to_output = (function(uri) {
-  /** @todo check to ensure `uri` is a directory */
-  if (!fs.existsSync(uri)) {
-    const rel = path.relative(process.cwd(), uri);
-    console.error(`Cannot write to "${rel}", directory does not exist`);
-    process.exit(1);
-  }
-  uri = path.join(uri, "package.json");
-  if (uri[0] === "/") return uri;
-  return path.join(process.cwd(), uri);
-})(args._[0] || path.join(process.cwd(), "dist"));
-
-let pkg;
-try {
-  pkg = require(path_to_original);
-} catch (error) {
-  console.error("Package isn't not valid");
-  console.error(error);
-  process.exit(1);
-}
-
-let new_pkg = {};
-const default_keys = [
-  "author",
-  "contributors",
-  "description",
-  "keywords",
-  "repository",
-  "bugs",
-  "main",
-  "module",
-  "scripts",
-  "dependencies",
-  "peerDependencies",
-  "license"
-];
-
-for (const key of default_keys) {
-  if (objectPath(pkg).has(key)) {
-    new_pkg[key] = pkg[key];
-  }
-}
-
-/** @type {{ key: string, action: 'include' | 'omit' }[]} */
-const user_requested_keys = []
-  .concat(
-    args.include.split(",").map(key => ({ key, action: "include" })),
-    args.omit.split(",").map(key => ({ key, action: "omit" }))
-  )
-  .sort(require("./path-sort"));
-
-for (const { key, action } of user_requested_keys) {
-  if (action === "include" && objectPath(pkg).has(key)) {
-    objectPath(new_pkg).set(key, objectPath(pkg).get(key));
-  } else if (action === "omit") {
-    objectPath(new_pkg).del(key);
-  }
-}
-
-new_pkg = Object.assign(
-  {
-    name: pkg.name,
-    version: pkg.version
-  },
-  new_pkg
-);
-
-const pkg_data = JSON.stringify(new_pkg, null, indent);
-
-fs.writeFile(path_to_output, pkg_data, err => {
-  if (!err) {
-    copyFiles().catch(console.error);
-  } else {
-    console.error(err);
-    process.exit(1);
-  }
-});
-
-async function copyFiles() {
-  const files = args["copy-file"];
-  for (const filename of files) {
-    const src = path.resolve(process.cwd(), filename);
-    const dest = path.resolve(path.dirname(path_to_output), filename);
-    fs.copyFile(src, dest, err => {
-      if (err) throw err;
+  fileWriter
+    .readPackage(package_json)
+    .then(package_json => {
+      return main(package_json, {
+        omit: options.omit || [],
+        include: options.include || [],
+        indent: indentation(options.indent || "2")
+      });
+    })
+    .then(package_json => {
+      return fileWriter.writePackage(package_json);
+    })
+    .then(() => {
+      copyFiles.forEach(filename => fileWriter.copyFile(resolve(filename)));
     });
-  }
+};
+
+function resolve(p) {
+  return path.resolve(process.cwd(), p);
+}
+
+function indentation(indent) {
+  if (indent === "tab") return "\t";
+  if (indent === "4") return "    ";
+  return "  ";
 }
