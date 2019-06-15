@@ -7,6 +7,7 @@ const DEFAULT_KEYS = [
   "keywords",
   "repository",
   "bugs",
+  "bin",
   "main",
   "module",
   "dependencies",
