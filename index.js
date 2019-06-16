@@ -7,7 +7,6 @@ const files = require("./files");
  * @property {string[]} [include] package.json keys (dot-syntax works)
  * @property {string} [useFile] use this file as `package.json`
  * @property {string} [target] directory to write files
- * @property {string[]} [copyFiles] copy files to dist directory
  * @property {'tab'|'2'|'4'} [indent] */
 
 /** @param {Options} [options] */
@@ -17,7 +16,6 @@ module.exports = function(options) {
   const target = resolve(options.target || "./dist");
   const package_json = options.useFile || resolve("./package.json");
   const fileWriter = files(target);
-  const copyFiles = options.copyFiles || [];
 
   fileWriter
     .readPackage(package_json)
@@ -32,7 +30,7 @@ module.exports = function(options) {
       return fileWriter.writePackage(package_json);
     })
     .then(() => {
-      copyFiles.forEach(filename => fileWriter.copyFile(resolve(filename)));
+      fileWriter.copyFilesFrom(process.cwd());
     });
 };
 

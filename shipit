@@ -15,13 +15,6 @@ const args = yargs
     describe: "Use provided file as `package.json`",
     default: "package.json"
   })
-  .option("copy-file", {
-    alias: "c",
-    array: true,
-    string: true,
-    describe: "Copy this file to target directory with package.json",
-    example: "--copy-file=README.md -c=CHANGELOG.md"
-  })
   .option("omit", {
     alias: "o",
     array: true,
@@ -62,9 +55,7 @@ async function execute() {
   });
 
   await files.writePackage(publish_ready_package_json);
-
-  const files_to_copy = args["copy-file"];
-  files_to_copy.forEach(p => files.copyFile(p));
+  await files.copyFilesFrom(process.cwd());
 }
 
 /**
