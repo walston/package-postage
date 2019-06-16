@@ -3,9 +3,9 @@ const yargs = require("yargs");
 const main = require("./main");
 
 const args = yargs
-  .scriptName("package-shipit")
+  .scriptName("postage")
   .version()
-  .pkgConf("shipit")
+  .pkgConf("postage")
   .option("no-overwrite", {
     boolean: true,
     describe: "Terminates process rather than overwriting old target path",

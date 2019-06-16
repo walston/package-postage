@@ -1,10 +1,10 @@
 {
-  "name": "package.shipit",
+  "name": "package-postage",
   "version": "0.1.0",
   "description": "copy the important parts of package.json into a smaller, shippable package.json for publishing",
   "main": "./index.js",
   "bin": {
-    "shipit": "./shipit"
+    "postage": "./postage"
   },
   "repository": {
     "type": "git",

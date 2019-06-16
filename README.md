@@ -13,43 +13,43 @@ If you are using `np` you have the option to publish a sub-directory rather than
 Copy package.json from your working-directory into `./dist`
 
 ```bash
-$ package-shipit
+$ postage
 ```
 
 Copy package.json from your working directory into `./any-folder-name`
 
 ```bash
-$ package-shipit any-folder-name/
+$ postage any-folder-name/
 ```
 
 Use an arbitrary file: `./package.dist.json`
 
 ```bash
-$ package-shipit build/ --use-file package.dist.json
+$ postage build/ --use-file package.dist.json
 ```
 
 Indent with tabs
 
 ```bash
-$ package-shipit --indent tab
+$ postage --indent tab
 ```
 
 Include a few extra top-level keys
 
 ```bash
-$ package-shipit --include eslint,babel,prettier
+$ postage --include eslint,babel,prettier
 ```
 
 Omit a few top-level keys
 
 ```bash
-$ package-shipit --omit repository,bugs,homepage
+$ postage --omit repository,bugs,homepage
 ```
 
 Include some sub-keys
 
 ```bash
-$ package-shipit \
+$ postage \
   --omit devDependencies,optionalDependencies \
   --include devDependencies.prettier,devDependencies.eslint;
 ```
