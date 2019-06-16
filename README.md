@@ -4,9 +4,9 @@
 
 ## Why would you do this?
 
- - 🗜 Ship smaller packages: only publish the transpiled code.
- - 💁‍ Pretty pathing: `import "your-package/utils"` works. No more `your-package/src/utils`
- - 👯‍ Avoid managing 2 package.json: encode your deployment stream.
+ - 🗜Ship smaller packages: only publish the transpiled code.
+ - 💁‍‍Pretty pathing: `import "your-package/utils"` works. No more `your-package/src/utils`
+ - 👯‍Avoid managing 2 package.json: encode your deployment stream.
 
 `npm publish` will allow you to publish a sub-directory, but does not copy package-json into that sub-directory. It is reasonable to want to publish that sub-directory but to ensure consistency of a `./dist/package.json` with `./package.json` would require some level of scripting. Enter **Package Postage**
 
@@ -17,7 +17,7 @@
 - **`omit`**: Some tags are included by default, you may want to manually exclude them: _"author", "bin", "bugs", "contributors", "dependencies", "description", "keywords", "license", "main", "module", "peerDependencies", "repository"._
 - **`include`**: If you'd like to ensure some non-standard keys are shipped pass the key to this.
 
-**note** omit & include can be combined to only include some child keys. _e.g._
+**note** `omit` & `include` can be combined to only include some child keys while stripping the rest: _e.g._
 
 ```json
 {
@@ -28,7 +28,7 @@
 }
 ```
 
-## 📦 Inside your package.json
+## 📦 Configure in package.json
 
 ```json
 {
@@ -42,7 +42,7 @@
 }
 ```
 
-### 👾 Inside gulp
+## 👾 Call from Gulp
 
 ```js
 const postage = require("package-postage");
@@ -54,7 +54,7 @@ postage("path_to_dest", {
 });
 ```
 
-### ⌨️ As a CLI
+## 💻 Execute from terminal
 
 ```bash
 # Copy package.json from your working-directory into `./dist`
