@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 
-const KEYS_TO_VALIDATE = ["bin", "main", "module"];
 const COPY_FILES = /^(?:CHANGELOG|changelog|README|readme|LICEN[SC]E|licen[sc]e)(?:\..*)?$/;
 const CWD = process.cwd();
 let destination = path.resolve(CWD, "dist");
