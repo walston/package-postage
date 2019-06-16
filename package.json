@@ -1,6 +1,6 @@
 {
   "name": "package.shipit",
-  "version": "0.0.1-4",
+  "version": "0.0.1-5",
   "description": "copy the important parts of package.json into a smaller, shippable package.json for publishing",
   "main": "./index.js",
   "bin": {
