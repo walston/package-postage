@@ -1,3 +1,5 @@
+![Package Postage Logo](./package-postage.png)
+
 ## Description
 
 **Package Postage** helps ship _utility libraries_. It is designed to work with [`np`](https://www.npmjs.com/package/np) as a low-level utility to copy the important parts of package.json into a sub-directory for publishing. I personally hook into `npm postversion`
