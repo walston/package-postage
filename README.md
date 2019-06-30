@@ -12,6 +12,12 @@
 
 `npm publish` will allow you to publish a sub-directory, but does not copy package-json into that sub-directory. It is reasonable to want to publish that sub-directory but to ensure consistency of a `./dist/package.json` with `./package.json` would require some level of scripting. Enter **Package Postage**
 
+## Installation
+
+```
+$ npm install --save-dev package-postage
+```
+
 ## ⚙️ API
 
 - **`indent`**: `["tab", "4", "2"]` - Specify the indentation of the resultant _package.json_
