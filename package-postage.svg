@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" version="1.1" viewBox="0 0 67.5 40.5">
+    <style type="text/css">
+        :root { --blue: hsl(235, 35%, 50%); --red: hsl(0, 60%, 50%); } text { font-family: monospace; font-size: 2.8px; font-weight: bold; fill: var(--blue) } .red { fill: var(--red); } .blue { fill: var(--blue); } .blue-line { fill: none; stroke: var(--blue); stroke-width: 1px; } .blue-dashed-line { fill: none; stroke: var(--blue); stroke-width: 1px; stroke-dasharray: 2px; stroke-linecap: round; } #star { stroke: var(--blue); stroke-width: 0.3px; stroke-linecap: round; stroke-linejoin: round; } #ink { mix-blend-mode: multiply; }
+    </style>
+    <defs>
+        <circle id="dot" cx="-0.5" cy="-0.5" r="0.7" class="blue"/>
+        <polygon id="star" fill-rule="nonzero" points="0,-2 1.176,1.618 -1.854,-0.75 1.854,-0.75 -1.176,1.618" class="blue"/>
+    </defs>
+    <g id="stamp" transform="translate(10)">
+        <path d=" M0,0 h2 h1 a2 2, 1 1 0 4,0 h1 a2 2, 1 1 0 4,0 h1 a2 2, 1 1 0 4,0 h1 a2 2, 1 1 0 4,0 h1 a2 2, 1 1 0 4,0 L30,0 v2 v1 a2 2, 1 1 0 0,4 v1 a2 2, 1 1 0 0,4 v1 a2 2, 1 1 0 0,4 v1 a2 2, 1 1 0 0,4 v1 a2 2, 1 1 0 0,4 L30,30 h-2 h-1 a2 2, 1 1 0 -4,0 h-1 a2 2, 1 1 0 -4,0 h-1 a2 2, 1 1 0 -4,0 h-1 a2 2, 1 1 0 -4,0 h-1 a2 2, 1 1 0 -4,0 L0,30 v-2 v-1 a2 2, 1 1 0 0,-4 v-1 a2 2, 1 1 0 0,-4 v-1 a2 2, 1 1 0 0,-4 v-1 a2 2, 1 1 0 0,-4 v-1 a2 2, 1 1 0 0,-4 z " class="red"/>
+        <path fill="white" d="M5,5 h20 v20 h-5 v-15 h-5 v15 h-10Z"/>
+    </g>
+    <g id="ink" transform="translate(17,24)">
+        <circle r="16" class="blue-line"/>
+        <circle r="12" class="blue-line"/>
+        <path stroke-dashoffset="1.1" d="M 50,-10 c-5,0 -5,-2 -10,-2 s-5,2 -10,2 s-5,-2 -10,-2 c-3,0 -4.6,1.4 -5.0,1.8" class="blue-dashed-line"/>
+        <path stroke-dashoffset="2.2" d="M 50,-5  c-5,0 -5,-2 -10,-2 s-5,2 -10,2 s-5,-2 -10,-2 c-2,0 -2.6,1.1 -3.0,1.2" class="blue-dashed-line"/>
+        <path stroke-dashoffset="3.3" d="M 50,0   c-5,0 -5,-2 -10,-2 s-5,2 -10,2 s-5,-2 -10,-2 c-1,0 -2.2,0.9 -2.4,1.0" class="blue-dashed-line"/>
+        <path stroke-dashoffset="4.4" d="M 50,5   c-5,0 -5,-2 -10,-2 s-5,2 -10,2 s-5,-2 -10,-2 c-2,0 -2.4,1.0 -2.7,1.1" class="blue-dashed-line"/>
+        <path stroke-dashoffset="5.5" d="M 50,10  c-5,0 -5,-2 -10,-2 s-5,2 -10,2 s-5,-2 -10,-2 c-3,0 -4.6,1.4 -5.0,1.8" class="blue-dashed-line"/>
+        <use transform="translate(14.5) rotate(0,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(15,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(30,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(45,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(60,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(75,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(90,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(105,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(120,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(135,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(150,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(165,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(180,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(195,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(210,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(225,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(240,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(255,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(270,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(285,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(300,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(315,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(330,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(14.5) rotate(345,-14.5,0)" xlink:href="#dot"/>
+        <use transform="translate(0,-5) rotate(0,0,5)" xlink:href="#star"/>
+        <use transform="translate(0,-5) rotate(72,0,5)" xlink:href="#star"/>
+        <use transform="translate(0,-5) rotate(144,0,5)" xlink:href="#star"/>
+        <use transform="translate(0,-5) rotate(216,0,5)" xlink:href="#star"/>
+        <use transform="translate(0,-5) rotate(288,0,5)" xlink:href="#star"/>
+        <path id="text" fill="none" d="M0.5,-9A 9 9, 0 1 1 -0.5,-9" transform="rotate(72)"/>
+        <text>
+            <textPath side="left" xlink:href="#text">PUBLISH ALL THE THINGS YOU CAN!!!</textPath>
+        </text>
+    </g>
+</svg>

@@ -1,4 +1,4 @@
-![Package Postage Logo](./package-postage.png)
+![Package Postage Logo](./package-postage.svg)
 
 ## Description
 
